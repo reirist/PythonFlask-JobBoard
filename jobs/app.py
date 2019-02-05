@@ -1,5 +1,6 @@
 import sqlite3
-from flask import Flask, render_template, g
+import datetime
+from flask import Flask, render_template, g, request, redirect, url_for
 
 PATH = 'db/jobs.sqlite'
 
@@ -37,6 +38,5 @@ def jobs():
 
 @app.route('/job/<job_id>')
 def job(job_id):
-    job = execute_sql('SELECT job.id, job.title, job.description, job.salary, employer.id as employer_id, employer.name as employer_name FROM job JOIN employer ON employer.id = job.employer_id WHERE job.id = ?',
-    [job_id, single=True])
+    job = execute_sql('SELECT job.id, job.title, job.description, job.salary, employer.id as employer_id, employer.name as employer_name FROM job JOIN employer ON employer.id = job.employer_id WHERE job.id = ?', [job_id], single=True)
     return render_template('job.html', job=job)
